@@ -19,9 +19,8 @@ Hello, thanks for checking out my handy Orbit data normalizer tool.
 ## Parameters
 
 - `--field`: This should be *location* or *company*
-- `--new`: This is what all the members will be updated to
-- Arguements: every space separated string passed after the command will be added to the search list
+- `--new`: The value to set for any matching members  
+- Arguments: every space-separated string passed after the command will be added to the search list
 
 - `ORBIT_API_KEY`: Set your Orbit API key as an environment variable
 - `ORBIT_WORKSPACE_ID`: Set the Orbit workspace ID you want to modify
-
