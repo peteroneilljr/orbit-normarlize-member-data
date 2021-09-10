@@ -15,7 +15,7 @@ import (
 var orbitApiKey = os.Getenv("ORBIT_API_KEY")
 var orbitWorkspaceID = os.Getenv("ORBIT_WORKSPACE_ID")
 var orbitField string
-var validSearch = false
+var validSearch = true
 var newName string
 var numMembersChanged = 0
 
@@ -39,7 +39,7 @@ func updateMember(memberID string, changeField string, newData string) {
 	}
 	defer res.Body.Close()
 	if res.StatusCode == 204 {
-		fmt.Printf("%s changed to: %s", orbitField, newName)
+		fmt.Printf("%s changed to: %s\n", orbitField, newName)
 		numMembersChanged++
 	} else {
 		fmt.Println("Error: HTTP Status Code:", res.StatusCode)
