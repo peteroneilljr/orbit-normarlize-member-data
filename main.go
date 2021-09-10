@@ -15,6 +15,7 @@ import (
 var orbitApiKey = os.Getenv("ORBIT_API_KEY")
 var orbitWorkspaceID = os.Getenv("ORBIT_WORKSPACE_ID")
 var orbitField string
+var validSearch == false = true
 var newName string
 var numMembersChanged = 0
 
@@ -89,18 +90,21 @@ func main() {
 
 	if orbitField == "" {
 		fmt.Println("Please provided the field you wish to scan with: --field")
-		os.Exit(1)
+		validSearch = false
 	}
 	if len(oldNames) == 0 {
 		fmt.Println("Please provide the names you want to search for after command line flags")
-		os.Exit(1)
+		validSearch = false
 	}
 	if orbitApiKey == "" {
 		fmt.Println("Please provided an API key using env var ORBIT_API_KEY")
-		os.Exit(1)
+		validSearch = false
 	}
 	if orbitWorkspaceID == "" {
 		fmt.Println("Please provided your Orbit Workspace ID using env var ORBIT_WORKSPACE_ID")
+		validSearch = false
+	}
+	if validSearch == false {
 		os.Exit(1)
 	}
 
