@@ -15,7 +15,7 @@ import (
 var orbitApiKey = os.Getenv("ORBIT_API_KEY")
 var orbitWorkspaceID = os.Getenv("ORBIT_WORKSPACE_ID")
 var orbitField string
-var validSearch == false = true
+var validSearch = false
 var newName string
 var numMembersChanged = 0
 
@@ -104,7 +104,7 @@ func main() {
 		fmt.Println("Please provided your Orbit Workspace ID using env var ORBIT_WORKSPACE_ID")
 		validSearch = false
 	}
-	if validSearch == false {
+	if !validSearch {
 		os.Exit(1)
 	}
 
