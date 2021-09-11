@@ -6,7 +6,7 @@ Thanks for checking out my handy Orbit data normalizer tool.
 
 1. Query member profiles for a word and return either location or company data. This query will search the complete member profile. For example, companies or locations described in the member's title or description will trigger a match.
     ```bash
-    $ go run ./main.go --query="brisbane" --return-location | sort -u | paste -sd " " -
+    $ go run ./main.go --query="brisbane" --return=location | sort -u | paste -sd " " -
     "Brisbane" "Brisbane, Australia" "San Francisco"
     ```
 
@@ -61,7 +61,7 @@ Thanks for checking out my handy Orbit data normalizer tool.
 
 1. Query member profiles for a word and return either location or company data. This query will search the complete member profile. For example, companies or locations described in the member's title or description will trigger a match.
     ```bash
-    $ go run ./main.go --query="apple" --return-company | sort -u | paste -sd " " -
+    $ go run ./main.go --query="apple" --return=company | sort -u | paste -sd " " -
     "" "@apple" "@atlassian " "Apple Inc." "Apple" "Roku" "ThoughtWorks"
     ```
 1. Trim the unwanted results and search for matches.
@@ -160,8 +160,7 @@ $ go run ./main.go --query=apple | jq '.data[] | "\(.attributes.email) \(.attrib
 - Names: Pass in space-separated strings at the end of the command. Orbit will query the members that match these names.
 - `--new`: The value to synchronize across members for the provided field
 - `--query`: Search member profiles for a word or phrase.
-- `--return-location`: Returns a list of location data for the matching members
-- `--return-company`: Returns a list of company data for the matching members
+- `--return`: Specify a field like `company` or `location`, used with `--query`, 
 
 Create Environment Variables to authenticate Orbit API requests
 - `ORBIT_API_KEY`: Set your Orbit API key as an environment variable

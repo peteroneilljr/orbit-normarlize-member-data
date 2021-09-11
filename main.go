@@ -17,8 +17,7 @@ var orbitApiKey = os.Getenv("ORBIT_API_KEY")
 var orbitWorkspaceID = os.Getenv("ORBIT_WORKSPACE_ID")
 var orbitField string
 var orbitQuery string
-var returnLocation bool
-var returnCompany bool
+var returnField string
 var newName string
 var oldNames []string
 var numMembersChanged = 0
@@ -164,12 +163,12 @@ func getMemberList(field string, search string) []byte {
 	return memberListJson
 }
 
-func printMemberData(json []byte, field string, query string) {
+func printMemberData(members []byte, field string, query string) {
 	searchString := fmt.Sprintf("data.#.attributes.%s", field)
-	results := gjson.GetBytes(json, searchString)
+	results := gjson.GetBytes(members, searchString)
 
 	if results.Raw == "[]" {
-		fmt.Printf("No members for query: %s\n", query)
+		fmt.Printf("No data to return for query %s on field %s\n", query, field)
 		return
 	}
 
@@ -185,8 +184,7 @@ func main() {
 	flag.StringVar(&orbitField, "field", "", "The field in Orbit you wish to update")
 	flag.StringVar(&newName, "new", "", "This will replace the old data")
 	flag.StringVar(&orbitQuery, "query", "", "This will return a list of members profiles that contain the query string")
-	flag.BoolVar(&returnLocation, "return-location", false, "Returns a list of member locations with --query")
-	flag.BoolVar(&returnCompany, "return-company", false, "Returns a list of member companies with --query")
+	flag.StringVar(&returnField, "return", "", "Returns a list of member data for this field, used with the --query flag")
 
 	flag.Parse()
 	oldNames = flag.Args()
@@ -197,13 +195,9 @@ func main() {
 	if orbitQuery != "" {
 		memberList := getMemberList("query", orbitQuery)
 
-		if returnCompany {
-			printMemberData(memberList, "company", orbitQuery)
-		}
-		if returnLocation {
-			printMemberData(memberList, "location", orbitQuery)
-		}
-		if !returnCompany && !returnLocation {
+		if returnField != "" {
+			printMemberData(memberList, returnField, orbitQuery)
+		} else {
 			fmt.Println(string(memberList))
 		}
 
