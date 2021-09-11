@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -22,6 +23,28 @@ var validSearch = true
 var newName string
 var oldNames []string
 var numMembersChanged = 0
+
+type Member struct {
+	Id        string   `json:"id"`
+	Name      string   `json:"name"`
+	Email     string   `json:"email"`
+	Title     string   `json:"title"`
+	Avatar    string   `json:"avatar_url"`
+	Bio       string   `json:"bio"`
+	Birthday  string   `json:"birthday"`
+	Company   string   `json:"company"`
+	Location  string   `json:"location"`
+	Tags      []string `json:"tags"`
+	Teammate  bool     `json:"teammate"`
+	Url       string   `json:"url"`
+	OrbitUrl  string   `json:"orbit_url"`
+	Twitter   string   `json:"twitter"`
+	GitHub    string   `json:"github"`
+	Discourse string   `json:"discourse"`
+	Discord   string   `json:"discord"`
+	DevTo     string   `json:"devto"`
+	Linkedin  string   `json:"linkedin"`
+}
 
 func validateRequest() {
 	if orbitApiKey == "" {
@@ -87,19 +110,23 @@ func updateMember(memberID string, field string, name string) {
 		fmt.Println("Error: HTTP Status Code:", res.StatusCode)
 	}
 }
-func updateMemberList(memberList []byte, memberCount int, field string, name string) {
+func updateMemberList(memberList []byte, field string, name string) {
+	membersIDs := gjson.GetBytes(memberList, "data.#.attributes.id")
+	memberCount := len(membersIDs.Array())
+
 	for x := 0; x < memberCount; x++ {
 
-		memberName := gjson.GetBytes(memberList, fmt.Sprintf("data.%d.attributes.name", x))
-		fmt.Println("Member Name:", memberName)
+		member := Member{}
+		memberData := gjson.GetBytes(memberList, fmt.Sprintf("data.%d.attributes", x))
+		err := json.Unmarshal([]byte(memberData.Raw), &member)
+		if err != nil {
+			fmt.Println("Could not find info in:", memberList)
+		}
+		fmt.Println("Member Name:", member.Name)
+		fmt.Println("Member Email:", member.Email)
+		fmt.Println("Member ID:", member.Id)
 
-		memberEmail := gjson.GetBytes(memberList, fmt.Sprintf("data.%d.attributes.email", x))
-		fmt.Println("Member Email:", memberEmail)
-
-		memberID := gjson.GetBytes(memberList, fmt.Sprintf("data.%d.attributes.id", x))
-		fmt.Println("Member ID:", memberID)
-
-		updateMember(memberID.String(), field, name)
+		updateMember(member.Id, field, name)
 	}
 }
 func getMemberList(field string, search string) []byte {
@@ -193,7 +220,7 @@ func main() {
 			if matchingCount == 0 {
 				continue
 			} else if newName != "" {
-				updateMemberList(matchingMembers, matchingCount, orbitField, newName)
+				updateMemberList(matchingMembers, orbitField, newName)
 			}
 		}
 		fmt.Printf("\n===\nNumber Of Members Updated: %d\n", numMembersChanged)
