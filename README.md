@@ -2,9 +2,9 @@
 
 Thanks for checking out my handy Orbit data normalizer tool. 
 
-## Syncronize Member Location Data
+## Synchronize Member Location Data
 
-1. Query member profiles for a given word and return either location or company data. This will search their user bio as well, so some results may match on `ex-apple` or similar.
+1. Query member profiles for a word and return either location or company data. This query will search the complete member profile. For example, companies or locations described in the member's title or description will trigger a match.
     ```bash
     $ go run ./main.go --query="brisbane" --return-location | sort -u | paste -sd " " -
     "Brisbane" "Brisbane, Australia" "San Francisco"
@@ -25,7 +25,7 @@ Thanks for checking out my handy Orbit data normalizer tool.
     Number Of Members Updated: 0
     ```
 1. Choose the value you wish to synchronize across these member accounts and specify it with the `--new` flag. 
-    > WARNING: This change is NOT reversable. Once these changes are made they are permanent.
+    > WARNING:  These changes are permanent. Double-check your changes before committing them. 
     ```bash
     $ go run ./main.go --field=location --new="Brisbane, Australia"  "Brisbane"
     Orbit Field: location
@@ -42,7 +42,7 @@ Thanks for checking out my handy Orbit data normalizer tool.
     Number Of Members Updated: 1
     ```
 
-1. Run the query again without the `--new` flag to see that all users have been moved over to the correct field.
+1. To verify these changes, run the query again, but without the `--new` flag. You should now see more members in the field you specified as new.
     ```bash
     $ go run ./main.go --field=location "Brisbane, Australia"  "Brisbane"
     Orbit Field: location
@@ -57,9 +57,9 @@ Thanks for checking out my handy Orbit data normalizer tool.
     Number Of Members Updated: 0
     ```
 
-## Syncronize Member Company Data
+## Synchronize Member Company Data
 
-1. Query member profiles for a given word and return either location or company data. This will search their user bio as well, so some results may match on `ex-apple` or similar.
+1. Query member profiles for a word and return either location or company data. This query will search the complete member profile. For example, companies or locations described in the member's title or description will trigger a match.
     ```bash
     $ go run ./main.go --query="apple" --return-company | sort -u | paste -sd " " -
     "" "@apple" "@atlassian " "Apple Inc." "Apple" "Roku" "ThoughtWorks"
@@ -81,7 +81,7 @@ Thanks for checking out my handy Orbit data normalizer tool.
     Number Of Members Updated: 0
     ```
 1. Choose the value you wish to synchronize across these member accounts and specify it with the `--new` flag. 
-    > WARNING: This change is NOT reversable. Once these changes are made they are permanent.
+    > WARNING:  These changes are permanent. Double-check your changes before committing them. 
     ```bash
     $ go run ./main.go --field=company --new="Apple Inc." "@apple" "Apple"
     Orbit Field: company
@@ -136,7 +136,7 @@ Thanks for checking out my handy Orbit data normalizer tool.
 
 ## Query for user data
 
-Query without either of the return flags just returns the raw json object from Orbit. This works really well for searching and pulling member attributes. 
+Querying without either of the return flags returns the raw JSON object from Orbit. This works well for searching and pulling member attributes. 
 
 ```bash
 $ go run ./main.go --query=apple | jq '.data[] | "\(.attributes.email) \(.attributes.github)"'
@@ -156,13 +156,13 @@ $ go run ./main.go --query=apple | jq '.data[] | "\(.attributes.email) \(.attrib
 
 ## Parameters
 
-- `--field`: This selects the member attribute to search, currently *location* or *company* are available
+- `--field`: This selects the member attribute to search; currently, *location* or *company* are available
 - Names: Pass in space-separated strings at the end of the command. Orbit will query the members that match these names.
-- `--new`: The value to syncronize across members for the provided field
-- `--query`: Search the member profiles for a given word or phrase.
+- `--new`: The value to synchronize across members for the provided field
+- `--query`: Search member profiles for a word or phrase.
 - `--return-location`: Returns a list of location data for the matching members
 - `--return-company`: Returns a list of company data for the matching members
 
-
+Create Environment Variables to authenticate Orbit API requests
 - `ORBIT_API_KEY`: Set your Orbit API key as an environment variable
 - `ORBIT_WORKSPACE_ID`: Set the Orbit workspace ID you want to modify
