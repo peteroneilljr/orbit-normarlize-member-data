@@ -19,7 +19,6 @@ var orbitField string
 var orbitQuery string
 var returnLocation bool
 var returnCompany bool
-var validSearch = true
 var newName string
 var oldNames []string
 var numMembersChanged = 0
@@ -47,6 +46,9 @@ type Member struct {
 }
 
 func validateRequest() {
+	var validSearch = true
+
+	// Check for valid Orbit API credentials
 	if orbitApiKey == "" {
 		fmt.Println("Please provided an API key using env var ORBIT_API_KEY")
 		validSearch = false
@@ -56,6 +58,7 @@ func validateRequest() {
 		validSearch = false
 	}
 
+	// Check for update parameters
 	if orbitQuery == "" {
 		if orbitField == "" {
 			fmt.Println("Please provided the field you wish to scan with: --field")
@@ -66,6 +69,7 @@ func validateRequest() {
 			validSearch = false
 		}
 	} else {
+		// Check that no flags are passed in with query flag
 		if orbitField != "" {
 			fmt.Println("--query is not compatible with --field")
 			validSearch = false
