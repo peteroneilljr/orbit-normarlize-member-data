@@ -1,6 +1,14 @@
-# Orbit Data Normalizer
+# Orbit Normalize Member Data 
 
-Thanks for checking out my handy Orbit data normalizer tool. 
+Thanks for checking out my handy tool to work with [Orbit's api](https://docs.orbit.love/reference/about-the-orbit-api). Everything is written in go and will continue to be updated as I add in more use cases. 
+
+These are the use cases it works for so far:
+- Synchronize Member Data, either company or location
+- Query for members
+
+Future use cases:
+- Import members/activites from events
+- Populate tags based on attributes
 
 ## Synchronize Member Location Data
 
